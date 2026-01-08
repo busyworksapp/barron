@@ -21,12 +21,13 @@ class Auth {
             // Check login attempts
             $this->checkLoginAttempts($username);
             
-            // Get user details
-            $query = "SELECT e.*, r.role_code, r.role_name, d.department_name
-                      FROM employees e
-                      LEFT JOIN roles r ON e.role_id = r.id
-                      LEFT JOIN departments d ON e.department_id = d.id
-                      WHERE e.username = :username AND e.is_active = 1";
+            // Get user details from users table with roles
+            $query = "SELECT u.*, r.role_code, r.role_name
+                      FROM users u
+                      LEFT JOIN user_roles ur ON u.id = ur.user_id
+                      LEFT JOIN roles r ON ur.role_id = r.id
+                      WHERE (u.username = :username OR u.email = :username) 
+                      AND u.status = 'active'";
             
             $stmt = $this->conn->prepare($query);
             $stmt->execute([':username' => $username]);
