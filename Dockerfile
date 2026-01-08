@@ -12,9 +12,11 @@ WORKDIR /app
 # Copy application files
 COPY . /app
 
+# Make start script executable
+RUN chmod +x /app/start.sh
+
 # Expose port (Railway will set $PORT)
 EXPOSE 8080
 
-# Start PHP built-in server
-# Use shell form to properly expand environment variables
-CMD sh -c "php -S 0.0.0.0:${PORT:-8080} -t ."
+# Start PHP built-in server using entrypoint script
+CMD ["/app/start.sh"]
