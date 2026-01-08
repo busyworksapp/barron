@@ -33,16 +33,16 @@ In Railway dashboard, go to your project → **Variables** tab and add:
 
 ```env
 # Database Configuration (Your existing Railway MySQL)
-DB_HOST=yamanote.proxy.rlwy.net
-DB_PORT=39713
+DB_HOST=caboose.proxy.rlwy.net
+DB_PORT=20038
 DB_DATABASE=railway
 DB_USERNAME=root
-DB_PASSWORD=hwemqHyJCOMkVycHiOcRqWBXnUryhFjw
+DB_PASSWORD=EDDEmqdRstvoHdqCmEflYJrnpaBwWajy
 
 # Redis Configuration (Your existing Railway Redis)
-REDIS_HOST=caboose.proxy.rlwy.net
-REDIS_PORT=39766
-REDIS_PASSWORD=maXFCPazHpxaASnHpDcszQQpTsfONXFE
+REDIS_HOST=shortline.proxy.rlwy.net
+REDIS_PORT=52214
+REDIS_PASSWORD=XtgNxbfliemuheWayTxbbHYedMFtdFjz
 
 # Application Configuration
 APP_ENV=production
@@ -74,7 +74,7 @@ railway login
 railway link
 
 # Import database
-railway run mysql -h yamanote.proxy.rlwy.net -P 39713 -u root -p railway < database/complete_schema.sql
+railway run mysql -h caboose.proxy.rlwy.net -P 20038 -u root -p railway < database/complete_schema.sql
 ```
 
 **Option B: Using phpMyAdmin (if available)**
@@ -84,7 +84,7 @@ railway run mysql -h yamanote.proxy.rlwy.net -P 39713 -u root -p railway < datab
 
 **Option C: Using MySQL client locally**
 ```bash
-mysql -h yamanote.proxy.rlwy.net -P 39713 -u root -phwemqHyJCOMkVycHiOcRqWBXnUryhFjw railway < database/complete_schema.sql
+mysql -h caboose.proxy.rlwy.net -P 20038 -u root -pEDDEmqdRstvoHdqCmEflYJrnpaBwWajy railway < database/complete_schema.sql
 ```
 
 ### Step 5: Verify Deployment
@@ -146,14 +146,14 @@ railway init
 railway link
 
 # 5. Set environment variables
-railway variables set DB_HOST=yamanote.proxy.rlwy.net
-railway variables set DB_PORT=39713
+railway variables set DB_HOST=caboose.proxy.rlwy.net
+railway variables set DB_PORT=20038
 railway variables set DB_DATABASE=railway
 railway variables set DB_USERNAME=root
-railway variables set DB_PASSWORD=hwemqHyJCOMkVycHiOcRqWBXnUryhFjw
-railway variables set REDIS_HOST=caboose.proxy.rlwy.net
-railway variables set REDIS_PORT=39766
-railway variables set REDIS_PASSWORD=maXFCPazHpxaASnHpDcszQQpTsfONXFE
+railway variables set DB_PASSWORD=EDDEmqdRstvoHdqCmEflYJrnpaBwWajy
+railway variables set REDIS_HOST=shortline.proxy.rlwy.net
+railway variables set REDIS_PORT=52214
+railway variables set REDIS_PASSWORD=XtgNxbfliemuheWayTxbbHYedMFtdFjz
 railway variables set APP_ENV=production
 railway variables set APP_DEBUG=false
 
@@ -265,8 +265,8 @@ Simply push to GitHub main branch, and Railway will auto-deploy! 🚀
 ## 📝 QUICK REFERENCE
 
 **Your Railway Services:**
-- MySQL: `yamanote.proxy.rlwy.net:39713`
-- Redis: `caboose.proxy.rlwy.net:39766`
+- MySQL: `caboose.proxy.rlwy.net:20038`
+- Redis: `shortline.proxy.rlwy.net:52214`
 - Database: `railway`
 
 **Default Admin:**
@@ -274,7 +274,7 @@ Simply push to GitHub main branch, and Railway will auto-deploy! 🚀
 - Password: `admin123` (CHANGE IMMEDIATELY)
 
 **GitHub Repo:**
-- https://github.com/thabanghutamo/barron.git
+- https://github.com/busyworksapp/barron.git
 
 ---
 
