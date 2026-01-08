@@ -26,11 +26,11 @@ class Auth {
                       FROM users u
                       LEFT JOIN user_roles ur ON u.id = ur.user_id
                       LEFT JOIN roles r ON ur.role_id = r.id
-                      WHERE (u.username = :username OR u.email = :username) 
+                      WHERE (u.username = :username OR u.email = :email) 
                       AND u.status = 'active'";
             
             $stmt = $this->conn->prepare($query);
-            $stmt->execute([':username' => $username]);
+            $stmt->execute([':username' => $username, ':email' => $username]);
             
             if ($stmt->rowCount() == 0) {
                 $this->recordFailedAttempt($username);
