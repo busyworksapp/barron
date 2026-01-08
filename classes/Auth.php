@@ -301,28 +301,28 @@ class Auth {
             }
             
             // Get current password
-            $query = "SELECT password_hash FROM employees WHERE id = :user_id";
+            $query = "SELECT password FROM users WHERE id = :user_id";
             $stmt = $this->conn->prepare($query);
             $stmt->execute([':user_id' => $user_id]);
             
             $user = $stmt->fetch();
             
             // Verify old password
-            if (!password_verify($old_password, $user['password_hash'])) {
+            if (!password_verify($old_password, $user['password'])) {
                 throw new Exception('Current password is incorrect');
             }
             
             // Update password
             $new_hash = password_hash($new_password, PASSWORD_DEFAULT);
             
-            $query = "UPDATE employees SET password_hash = :password_hash, updated_at = CURRENT_TIMESTAMP WHERE id = :user_id";
+            $query = "UPDATE users SET password = :password, updated_at = CURRENT_TIMESTAMP WHERE id = :user_id";
             $stmt = $this->conn->prepare($query);
             $stmt->execute([
-                ':password_hash' => $new_hash,
+                ':password' => $new_hash,
                 ':user_id' => $user_id
             ]);
             
-            logActivity('update', 'employees', $user_id, null, ['password_changed' => true]);
+            logActivity('update', 'users', $user_id, null, ['password_changed' => true]);
             
             return ['success' => true, 'message' => 'Password changed successfully'];
             
@@ -340,14 +340,14 @@ class Auth {
             $new_password = generateRandomPassword(8);
             $new_hash = password_hash($new_password, PASSWORD_DEFAULT);
             
-            $query = "UPDATE employees SET password_hash = :password_hash, updated_at = CURRENT_TIMESTAMP WHERE id = :user_id";
+            $query = "UPDATE users SET password = :password, updated_at = CURRENT_TIMESTAMP WHERE id = :user_id";
             $stmt = $this->conn->prepare($query);
             $stmt->execute([
-                ':password_hash' => $new_hash,
+                ':password' => $new_hash,
                 ':user_id' => $user_id
             ]);
             
-            logActivity('update', 'employees', $user_id, null, ['password_reset' => true]);
+            logActivity('update', 'users', $user_id, null, ['password_reset' => true]);
             
             return [
                 'success' => true,
