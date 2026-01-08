@@ -39,8 +39,16 @@ class Auth {
             
             $user = $stmt->fetch();
             
+            // Debug logging
+            error_log("Login attempt - User found: " . $user['username']);
+            error_log("Password hash from DB: " . $user['password']);
+            error_log("Verifying password...");
+            
             // Verify password
-            if (!password_verify($password, $user['password'])) {
+            $passwordMatch = password_verify($password, $user['password']);
+            error_log("Password match result: " . ($passwordMatch ? 'true' : 'false'));
+            
+            if (!$passwordMatch) {
                 $this->recordFailedAttempt($username);
                 throw new Exception('Invalid username or password');
             }
