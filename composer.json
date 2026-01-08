@@ -1,0 +1,48 @@
+{
+    "name": "barron/production-management-system",
+    "description": "Comprehensive enterprise production management system for manufacturing and branding operations",
+    "version": "1.0.0",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Barron Development Team",
+            "email": "dev@barron.co.za"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-openssl": "*"
+    },
+    "require-dev": {
+    },
+    "suggest": {
+        "ext-redis": "For caching and session management",
+        "phpmailer/phpmailer": "For email notifications"
+    },
+    "autoload": {
+        "psr-4": {
+            "Barron\\": "classes/"
+        },
+        "files": [
+            "includes/functions.php"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@php -r \"if (!file_exists('logs')) { mkdir('logs', 0755, true); }\"",
+            "@php -r \"if (!file_exists('uploads')) { mkdir('uploads', 0755, true); }\""
+        ]
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

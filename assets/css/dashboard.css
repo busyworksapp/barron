@@ -1,0 +1,392 @@
+/**
+ * Dashboard Styles
+ */
+
+/* ============================================
+   NAVIGATION BAR
+   ============================================ */
+
+.navbar {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    max-width: 100%;
+}
+
+.navbar-brand {
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar-title {
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-bold);
+    margin: 0;
+    color: var(--color-white);
+    letter-spacing: 2px;
+}
+
+.navbar-subtitle {
+    font-size: var(--font-size-small);
+    color: var(--color-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.navbar-menu {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.navbar-user {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.user-name {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-white);
+}
+
+.user-role {
+    font-size: var(--font-size-small);
+    color: var(--color-light);
+    text-transform: uppercase;
+}
+
+.navbar-notifications {
+    position: relative;
+}
+
+.btn-notification {
+    background: transparent;
+    border: none;
+    color: var(--color-white);
+    cursor: pointer;
+    font-size: 20px;
+    padding: var(--spacing-sm);
+    position: relative;
+    transition: transform var(--transition-fast);
+}
+
+.btn-notification:hover {
+    transform: scale(1.1);
+}
+
+.notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--color-danger);
+    color: var(--color-white);
+    font-size: 10px;
+    font-weight: var(--font-weight-bold);
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+
+.layout {
+    display: flex;
+    min-height: calc(100vh - 80px);
+}
+
+/* ============================================
+   SIDEBAR
+   ============================================ */
+
+.sidebar {
+    width: 260px;
+    background-color: var(--color-grey-dark);
+    color: var(--color-white);
+    overflow-y: auto;
+    box-shadow: var(--shadow-md);
+}
+
+.sidebar-nav {
+    padding: var(--spacing-md);
+}
+
+.nav-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.nav-section-title {
+    color: var(--color-grey-light);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--color-white);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-xs);
+    transition: all var(--transition-fast);
+}
+
+.nav-item:hover {
+    background-color: var(--color-primary);
+    transform: translateX(4px);
+}
+
+.nav-item.active {
+    background-color: var(--color-secondary);
+    font-weight: var(--font-weight-bold);
+}
+
+.nav-icon {
+    font-size: 18px;
+    margin-right: var(--spacing-sm);
+    width: 24px;
+    text-align: center;
+}
+
+.nav-label {
+    flex: 1;
+}
+
+/* ============================================
+   MAIN CONTENT
+   ============================================ */
+
+.main-content {
+    flex: 1;
+    padding: var(--spacing-lg);
+    background-color: var(--color-light);
+    overflow-y: auto;
+}
+
+.content-header {
+    margin-bottom: var(--spacing-lg);
+}
+
+.content-header h1 {
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-primary);
+}
+
+/* ============================================
+   DASHBOARD GRID
+   ============================================ */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.stat-card {
+    background-color: var(--color-white);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.stat-details {
+    flex: 1;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    margin: 0;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: var(--font-size-small);
+    color: var(--color-grey);
+    margin: var(--spacing-xs) 0 0 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ============================================
+   NOTIFICATION PANEL
+   ============================================ */
+
+.notification-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background-color: var(--color-white);
+    box-shadow: var(--shadow-lg);
+    transition: right var(--transition-normal);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-panel.open {
+    right: 0;
+}
+
+.notification-header {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: var(--spacing-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-header h3 {
+    margin: 0;
+    color: var(--color-white);
+}
+
+.btn-close {
+    background: transparent;
+    border: none;
+    color: var(--color-white);
+    font-size: 28px;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition-fast);
+}
+
+.btn-close:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.notification-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-md);
+}
+
+.notification-item {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--color-light);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.notification-item:hover {
+    background-color: var(--color-light);
+}
+
+.notification-item.unread {
+    background-color: rgba(52, 152, 219, 0.05);
+    border-left: 3px solid var(--color-secondary);
+}
+
+.notification-title {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.notification-message {
+    font-size: var(--font-size-small);
+    color: var(--color-grey);
+    margin-bottom: var(--spacing-xs);
+}
+
+.notification-time {
+    font-size: var(--font-size-small);
+    color: var(--color-grey-light);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .navbar-container {
+        padding: var(--spacing-sm);
+    }
+    
+    .navbar-title {
+        font-size: var(--font-size-large);
+    }
+    
+    .navbar-subtitle {
+        font-size: 10px;
+    }
+    
+    .navbar-user {
+        display: none;
+    }
+    
+    .sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        height: 100vh;
+        z-index: 1500;
+        transition: left var(--transition-normal);
+    }
+    
+    .sidebar.open {
+        left: 0;
+    }
+    
+    .main-content {
+        padding: var(--spacing-md);
+    }
+    
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .notification-panel {
+        width: 100%;
+        right: -100%;
+    }
+}

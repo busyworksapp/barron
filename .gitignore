@@ -1,0 +1,90 @@
+# Barron Production Management System
+# Git Ignore File
+
+# Logs
+logs/
+*.log
+error.log
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# IDE Files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# Composer
+/vendor/
+composer.lock
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Sensitive configuration (if you create local overrides)
+config/local.php
+config/database.local.php
+
+# Cache
+cache/
+*.cache
+
+# Session files
+/tmp/
+sessions/
+
+# Backup files
+*.bak
+*.backup
+*.old
+*~
+
+# SQL dumps
+*.sql.gz
+dump.sql
+backup_*.sql
+
+# PHP
+*.php~
+
+# Node modules (if you add frontend build tools later)
+node_modules/
+package-lock.json
+
+# Build files
+/dist/
+/build/
+
+# Test files
+/tests/coverage/
+.phpunit.result.cache
+
+# Documentation builds
+/docs/_build/
+
+# Keep empty directories
+!logs/.gitkeep
+!uploads/.gitkeep
+!cache/.gitkeep
