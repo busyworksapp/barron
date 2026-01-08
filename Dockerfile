@@ -15,5 +15,5 @@ COPY . /app
 # Expose port (Railway will set $PORT)
 EXPOSE 8080
 
-# Use ENTRYPOINT with shell form to ensure proper variable expansion
-ENTRYPOINT php -S 0.0.0.0:${PORT:-8080} -t .
+# Debug and start - use sh -c to ensure shell variable expansion
+CMD ["sh", "-c", "echo PORT=$PORT && php -S 0.0.0.0:${PORT:-8080} -t ."]
