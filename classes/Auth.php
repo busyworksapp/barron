@@ -229,7 +229,7 @@ class Auth {
      * Update last login timestamp
      */
     private function updateLastLogin($user_id) {
-        $query = "UPDATE employees SET last_login = CURRENT_TIMESTAMP WHERE id = :user_id";
+        $query = "UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = :user_id";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([':user_id' => $user_id]);
     }
