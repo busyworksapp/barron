@@ -208,10 +208,11 @@ class Auth {
      */
     private function getUserPermissions($user_id) {
         $query = "SELECT DISTINCT p.permission_code
-                  FROM employees e
-                  JOIN role_permissions rp ON e.role_id = rp.role_id
+                  FROM users u
+                  JOIN user_roles ur ON u.id = ur.user_id
+                  JOIN role_permissions rp ON ur.role_id = rp.role_id
                   JOIN permissions p ON rp.permission_id = p.id
-                  WHERE e.id = :user_id AND p.is_active = 1";
+                  WHERE u.id = :user_id AND p.is_active = 1 AND rp.is_active = 1";
         
         $stmt = $this->conn->prepare($query);
         $stmt->execute([':user_id' => $user_id]);
