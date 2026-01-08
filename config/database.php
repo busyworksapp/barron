@@ -6,11 +6,11 @@
 
 class Database {
     // Railway MySQL Configuration
-    private $host = "yamanote.proxy.rlwy.net";
-    private $port = "39713";
+    private $host = "caboose.proxy.rlwy.net";
+    private $port = "20038";
     private $db_name = "railway";
     private $username = "root";
-    private $password = "hwemqHyJCOMkVycHiOcRqWBXnUryhFjw";
+    private $password = "EDDEmqdRstvoHdqCmEflYJrnpaBwWajy";
     
     public $conn;
     

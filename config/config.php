@@ -41,9 +41,9 @@ define('MAX_UPLOAD_SIZE', 10485760); // 10MB
 define('ALLOWED_FILE_TYPES', ['xlsx', 'xls', 'csv', 'pdf', 'jpg', 'jpeg', 'png']);
 
 // Redis Configuration (for caching and sessions)
-define('REDIS_HOST', 'caboose.proxy.rlwy.net');
-define('REDIS_PORT', 39766);
-define('REDIS_PASSWORD', 'maXFCPazHpxaASnHpDcszQQpTsfONXFE');
+define('REDIS_HOST', 'shortline.proxy.rlwy.net');
+define('REDIS_PORT', 52214);
+define('REDIS_PASSWORD', 'XtgNxbfliemuheWayTxbbHYedMFtdFjz');
 
 // Email Configuration
 define('SMTP_HOST', '');
