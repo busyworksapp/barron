@@ -13,7 +13,7 @@ WORKDIR /app
 COPY . /app
 
 # Expose port (Railway will set $PORT)
-EXPOSE ${PORT:-8080}
+EXPOSE 8080
 
-# Start PHP built-in server
-CMD php -S 0.0.0.0:${PORT:-8080} -t .
+# Start PHP built-in server using shell form to expand environment variables
+CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t ."]
