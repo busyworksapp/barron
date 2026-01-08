@@ -40,7 +40,7 @@ class Auth {
             $user = $stmt->fetch();
             
             // Verify password
-            if (!password_verify($password, $user['password_hash'])) {
+            if (!password_verify($password, $user['password'])) {
                 $this->recordFailedAttempt($username);
                 throw new Exception('Invalid username or password');
             }
