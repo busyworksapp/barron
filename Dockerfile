@@ -18,5 +18,5 @@ RUN chmod +x /app/start.sh
 # Expose port (Railway will set $PORT)
 EXPOSE 8080
 
-# Start PHP built-in server using entrypoint script
-CMD ["/app/start.sh"]
+# Start PHP built-in server using entrypoint script with shell
+CMD ["/bin/sh", "/app/start.sh"]
