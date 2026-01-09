@@ -12,7 +12,7 @@ header('Content-Type: application/json');
 
 try {
     requireLogin();
-    requirePermission('master.view');
+    // Note: Department list is needed by all pages for dropdowns, so no permission check
     
     $database = new Database();
     $conn = $database->getConnection();

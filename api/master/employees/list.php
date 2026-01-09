@@ -1,32 +1,24 @@
 <?php
 require_once '../../../config/config.php';
-require_once '../../../classes/Auth.php';
+require_once '../../../config/database.php';
 
 header('Content-Type: application/json');
 
-$auth = new Auth();
-if (!$auth->isAuthenticated()) {
-    echo jsonResponse(false, 'Unauthorized');
-    exit;
-}
-
-if (!hasPermission('master.view')) {
-    echo jsonResponse(false, 'Insufficient permissions');
-    exit;
-}
-
 try {
-    $db = Database::getInstance()->getConnection();
+    requireLogin();
+    
+    $database = new Database();
+    $conn = $database->getConnection();
     
     // Build query with filters
     $sql = "SELECT e.*, 
             d.department_name,
             r.role_name,
-            CONCAT(creator.first_name, ' ', creator.last_name) as created_by_name
+            u.name as created_by_name
             FROM employees e
             LEFT JOIN departments d ON e.primary_department_id = d.id
             LEFT JOIN roles r ON e.role_id = r.id
-            LEFT JOIN employees creator ON e.created_by = creator.id
+            LEFT JOIN users u ON e.created_by = u.id
             WHERE 1=1";
     
     $params = [];
@@ -63,13 +55,13 @@ try {
     
     $sql .= " ORDER BY e.first_name, e.last_name";
     
-    $stmt = $db->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->execute($params);
     $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    echo jsonResponse(true, 'Employees retrieved successfully', $employees);
+    successResponse('Employees retrieved successfully', $employees);
     
 } catch (Exception $e) {
     error_log('Error in employees/list.php: ' . $e->getMessage());
-    echo jsonResponse(false, 'Error retrieving employees: ' . $e->getMessage());
+    errorResponse('Error retrieving employees: ' . $e->getMessage());
 }
