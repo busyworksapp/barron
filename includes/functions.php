@@ -95,23 +95,9 @@ function getCurrentUser() {
  */
 function logActivity($action, $table_name, $record_id, $old_values = null, $new_values = null) {
     try {
-        $database = new Database();
-        $conn = $database->getConnection();
-        
-        $query = "INSERT INTO audit_log (table_name, record_id, action, old_values, new_values, changed_by, ip_address, user_agent) 
-                  VALUES (:table_name, :record_id, :action, :old_values, :new_values, :changed_by, :ip_address, :user_agent)";
-        
-        $stmt = $conn->prepare($query);
-        $stmt->execute([
-            ':table_name' => $table_name,
-            ':record_id' => $record_id,
-            ':action' => $action,
-            ':old_values' => $old_values ? json_encode($old_values) : null,
-            ':new_values' => $new_values ? json_encode($new_values) : null,
-            ':changed_by' => getCurrentUserId(),
-            ':ip_address' => $_SERVER['REMOTE_ADDR'] ?? null,
-            ':user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? null
-        ]);
+        // Activity logging disabled - no audit_log table in current schema
+        // This is a placeholder for future audit trail implementation
+        error_log("Activity: $action on $table_name (ID: $record_id) by user " . getCurrentUserId());
         
     } catch (Exception $e) {
         error_log("Activity logging failed: " . $e->getMessage());
@@ -121,24 +107,21 @@ function logActivity($action, $table_name, $record_id, $old_values = null, $new_
 /**
  * Send notification
  */
-function sendNotification($recipient_id, $type, $title, $message, $module = null, $reference_id = null, $reference_table = null, $priority = 'normal') {
+function sendNotification($user_id, $type, $title, $message, $module = null, $reference_id = null, $reference_table = null, $priority = 'normal') {
     try {
         $database = new Database();
         $conn = $database->getConnection();
         
-        $query = "INSERT INTO notifications (recipient_id, notification_type, title, message, module, reference_id, reference_table, priority) 
-                  VALUES (:recipient_id, :notification_type, :title, :message, :module, :reference_id, :reference_table, :priority)";
+        // Use actual notifications table schema: user_id, type, title, message, is_read, created_at
+        $query = "INSERT INTO notifications (user_id, type, title, message) 
+                  VALUES (:user_id, :type, :title, :message)";
         
         $stmt = $conn->prepare($query);
         return $stmt->execute([
-            ':recipient_id' => $recipient_id,
-            ':notification_type' => $type,
+            ':user_id' => $user_id,
+            ':type' => $type,
             ':title' => $title,
-            ':message' => $message,
-            ':module' => $module,
-            ':reference_id' => $reference_id,
-            ':reference_table' => $reference_table,
-            ':priority' => $priority
+            ':message' => $message
         ]);
         
     } catch (Exception $e) {
@@ -158,7 +141,8 @@ function getUnreadNotificationCount() {
         $database = new Database();
         $conn = $database->getConnection();
         
-        $query = "SELECT COUNT(*) as count FROM notifications WHERE recipient_id = :user_id AND is_read = 0";
+        // Use actual notifications table schema: user_id (not recipient_id)
+        $query = "SELECT COUNT(*) as count FROM notifications WHERE user_id = :user_id AND is_read = 0";
         $stmt = $conn->prepare($query);
         $stmt->execute([':user_id' => $user_id]);
         
