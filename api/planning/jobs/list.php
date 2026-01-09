@@ -1,18 +1,14 @@
 <?php
 require_once '../../../config/config.php';
-require_once '../../../classes/Auth.php';
+require_once '../../../classes/Database.php';
 
 header('Content-Type: application/json');
 
-$auth = new Auth();
-$auth->requireLogin();
-
-if (!hasPermission('planning.view')) {
-    echo jsonResponse(false, 'Permission denied');
-    exit;
-}
+requireLogin();
 
 try {
+    $conn = Database::getInstance()->getConnection();
+    
     // Get filter parameters
     $search = $_GET['search'] ?? '';
     $status = $_GET['status'] ?? '';
@@ -41,8 +37,8 @@ try {
                 m.machine_name,
                 m.machine_code,
                 CONCAT(e.first_name, ' ', e.last_name) as assigned_to_name,
-                CONCAT(c.first_name, ' ', c.last_name) as created_by_name
-              FROM job_schedules j
+                u.name as created_by_name
+              FROM jobs j
               INNER JOIN orders o ON j.order_id = o.id
               INNER JOIN order_items oi ON j.order_item_id = oi.id
               INNER JOIN products p ON oi.product_id = p.id
@@ -50,7 +46,7 @@ try {
               LEFT JOIN production_stages ps ON j.production_stage_id = ps.id
               LEFT JOIN machines m ON j.machine_id = m.id
               LEFT JOIN employees e ON j.assigned_to = e.id
-              LEFT JOIN users c ON j.created_by = c.id
+              LEFT JOIN users u ON j.created_by = u.id
               WHERE 1=1";
     
     $params = [];
@@ -85,13 +81,13 @@ try {
     
     $query .= " ORDER BY j.scheduled_start DESC, j.created_at DESC";
     
-    $stmt = $pdo->prepare($query);
+    $stmt = $conn->prepare($query);
     $stmt->execute($params);
     $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    echo jsonResponse(true, 'Jobs retrieved successfully', $jobs);
+    successResponse('Jobs retrieved successfully', $jobs);
     
 } catch (Exception $e) {
     error_log("Error in jobs/list.php: " . $e->getMessage());
-    echo jsonResponse(false, 'Error retrieving jobs: ' . $e->getMessage());
+    errorResponse('Error retrieving jobs: ' . $e->getMessage());
 }

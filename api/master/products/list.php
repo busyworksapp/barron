@@ -1,28 +1,20 @@
 <?php
 require_once '../../../config/config.php';
-require_once '../../../classes/Auth.php';
+require_once '../../../classes/Database.php';
 
 header('Content-Type: application/json');
 
-$auth = new Auth();
-if (!$auth->isAuthenticated()) {
-    echo jsonResponse(false, 'Unauthorized');
-    exit;
-}
-
-if (!hasPermission('master.view')) {
-    echo jsonResponse(false, 'Insufficient permissions');
-    exit;
-}
+requireLogin();
+// Note: Product list needed for dropdowns across the system
 
 try {
-    $db = Database::getInstance()->getConnection();
+    $conn = Database::getInstance()->getConnection();
     
     // Build query with filters
     $sql = "SELECT p.*, 
-            CONCAT(creator.first_name, ' ', creator.last_name) as created_by_name
+            u.name as created_by_name
             FROM products p
-            LEFT JOIN employees creator ON p.created_by = creator.id
+            LEFT JOIN users u ON p.created_by = u.id
             WHERE 1=1";
     
     $params = [];
@@ -48,15 +40,15 @@ try {
         $params[] = $_GET['is_active'];
     }
     
-    $sql .= " ORDER BY p.product_name";
+    $sql .= " ORDER BY p.created_at DESC";
     
-    $stmt = $db->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->execute($params);
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    echo jsonResponse(true, 'Products retrieved successfully', $products);
+    successResponse('Products retrieved successfully', $products);
     
 } catch (Exception $e) {
     error_log('Error in products/list.php: ' . $e->getMessage());
-    echo jsonResponse(false, 'Error retrieving products: ' . $e->getMessage());
+    errorResponse('Error retrieving products: ' . $e->getMessage());
 }

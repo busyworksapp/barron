@@ -1,30 +1,22 @@
 <?php
 require_once '../../../config/config.php';
-require_once '../../../classes/Auth.php';
+require_once '../../../classes/Database.php';
 
 header('Content-Type: application/json');
 
-$auth = new Auth();
-if (!$auth->isAuthenticated()) {
-    echo jsonResponse(false, 'Unauthorized');
-    exit;
-}
-
-if (!hasPermission('master.view')) {
-    echo jsonResponse(false, 'Insufficient permissions');
-    exit;
-}
+requireLogin();
+// Note: Machine list needed for dropdowns across the system
 
 try {
-    $db = Database::getInstance()->getConnection();
+    $conn = Database::getInstance()->getConnection();
     
     // Build query with filters
     $sql = "SELECT m.*, 
             d.department_name,
-            CONCAT(creator.first_name, ' ', creator.last_name) as created_by_name
+            u.name as created_by_name
             FROM machines m
             LEFT JOIN departments d ON m.department_id = d.id
-            LEFT JOIN employees creator ON m.created_by = creator.id
+            LEFT JOIN users u ON m.created_by = u.id
             WHERE 1=1";
     
     $params = [];
@@ -50,15 +42,15 @@ try {
         $params[] = $_GET['status'];
     }
     
-    $sql .= " ORDER BY m.machine_name";
+    $sql .= " ORDER BY m.created_at DESC";
     
-    $stmt = $db->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->execute($params);
     $machines = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    echo jsonResponse(true, 'Machines retrieved successfully', $machines);
+    successResponse('Machines retrieved successfully', $machines);
     
 } catch (Exception $e) {
     error_log('Error in machines/list.php: ' . $e->getMessage());
-    echo jsonResponse(false, 'Error retrieving machines: ' . $e->getMessage());
+    errorResponse('Error retrieving machines: ' . $e->getMessage());
 }

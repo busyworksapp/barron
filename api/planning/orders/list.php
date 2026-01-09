@@ -1,31 +1,22 @@
 <?php
 require_once '../../../config/config.php';
-require_once '../../../classes/Auth.php';
+require_once '../../../classes/Database.php';
 
 header('Content-Type: application/json');
 
-$auth = new Auth();
-if (!$auth->isAuthenticated()) {
-    echo jsonResponse(false, 'Unauthorized');
-    exit;
-}
-
-if (!hasPermission('planning.view')) {
-    echo jsonResponse(false, 'Insufficient permissions');
-    exit;
-}
+requireLogin();
 
 try {
-    $db = Database::getInstance()->getConnection();
+    $conn = Database::getInstance()->getConnection();
     
     // Build query with filters
     $sql = "SELECT o.*, 
-            CONCAT(creator.first_name, ' ', creator.last_name) as created_by_name,
+            u.name as created_by_name,
             COUNT(DISTINCT oi.id) as item_count,
             COALESCE(SUM(oi.quantity), 0) as total_quantity
             FROM orders o
             LEFT JOIN order_items oi ON o.id = oi.order_id
-            LEFT JOIN employees creator ON o.created_by = creator.id
+            LEFT JOIN users u ON o.created_by = u.id
             WHERE 1=1";
     
     $params = [];
@@ -57,15 +48,15 @@ try {
         $params[] = $_GET['date_to'];
     }
     
-    $sql .= " GROUP BY o.id ORDER BY o.order_date DESC, o.id DESC";
+    $sql .= " GROUP BY o.id ORDER BY o.created_at DESC";
     
-    $stmt = $db->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->execute($params);
     $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    echo jsonResponse(true, 'Orders retrieved successfully', $orders);
+    successResponse('Orders retrieved successfully', $orders);
     
 } catch (Exception $e) {
     error_log('Error in orders/list.php: ' . $e->getMessage());
-    echo jsonResponse(false, 'Error retrieving orders: ' . $e->getMessage());
+    errorResponse('Error retrieving orders: ' . $e->getMessage());
 }
