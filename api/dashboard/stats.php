@@ -19,41 +19,41 @@ try {
     $user_id = getCurrentUserId();
     $stats = [];
     
-    // Active Orders
-    if (hasPermission('planning.view')) {
-        $query = "SELECT COUNT(*) as count FROM orders WHERE status IN ('scheduled', 'in_progress')";
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        $stats['active_orders'] = $result['count'];
-    }
+    // Active Jobs
+    $query = "SELECT COUNT(*) as count FROM jobs WHERE status IN ('scheduled', 'in_progress')";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetch();
+    $stats['active_jobs'] = $result ? $result['count'] : 0;
     
-    // Pending Rejects
-    if (hasPermission('defects.view')) {
-        $query = "SELECT COUNT(*) as count FROM internal_rejects WHERE status = 'pending_approval'";
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        $stats['pending_rejects'] = $result['count'];
-    }
+    // Pending Defects
+    $query = "SELECT COUNT(*) as count FROM defects WHERE status = 'open'";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetch();
+    $stats['pending_defects'] = $result ? $result['count'] : 0;
     
-    // Open Maintenance Tickets
-    if (hasPermission('maintenance.view')) {
-        $query = "SELECT COUNT(*) as count FROM maintenance_tickets WHERE status IN ('open', 'assigned', 'in_progress')";
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        $stats['open_maintenance'] = $result['count'];
-    }
+    // Open Maintenance Tasks
+    $query = "SELECT COUNT(*) as count FROM maintenance_tasks WHERE status IN ('scheduled', 'in_progress')";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetch();
+    $stats['open_maintenance'] = $result ? $result['count'] : 0;
     
-    // Open SOP Tickets
-    if (hasPermission('sop.view')) {
-        $query = "SELECT COUNT(*) as count FROM sop_failures WHERE status IN ('open', 'ncr_in_progress', 'escalated')";
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        $stats['open_sop'] = $result['count'];
-    }
+    // Open NCRs
+    $query = "SELECT COUNT(*) as count FROM ncrs WHERE status IN ('draft', 'submitted', 'under_review')";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetch();
+    $stats['open_ncrs'] = $result ? $result['count'] : 0;
+    
+    // Unread Notifications
+    $query = "SELECT COUNT(*) as count FROM notifications WHERE user_id = :user_id AND is_read = 0";
+    $stmt = $conn->prepare($query);
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch();
+    $stats['unread_notifications'] = $result ? $result['count'] : 0;
     
     successResponse('Stats loaded successfully', $stats);
     

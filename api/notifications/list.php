@@ -21,16 +21,13 @@ try {
     
     $query = "SELECT 
                 id,
-                notification_type,
                 title,
                 message,
-                module,
-                reference_id,
-                priority,
+                type as notification_type,
                 is_read,
                 created_at
               FROM notifications
-              WHERE recipient_id = :user_id
+              WHERE user_id = :user_id
               ORDER BY is_read ASC, created_at DESC
               LIMIT :limit";
     

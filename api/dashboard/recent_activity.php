@@ -16,30 +16,42 @@ try {
     $database = new Database();
     $conn = $database->getConnection();
     
-    $user_id = getCurrentUserId();
     $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
     
-    $query = "SELECT 
-                al.action,
-                al.table_name,
-                al.record_id,
-                al.changed_at as created_at,
-                CONCAT(e.first_name, ' ', e.last_name) as user_name,
-                CASE 
-                    WHEN al.action = 'insert' THEN CONCAT('Created new ', REPLACE(al.table_name, '_', ' '))
-                    WHEN al.action = 'update' THEN CONCAT('Updated ', REPLACE(al.table_name, '_', ' '))
-                    WHEN al.action = 'delete' THEN CONCAT('Deleted ', REPLACE(al.table_name, '_', ' '))
-                END as description
-              FROM audit_log al
-              LEFT JOIN employees e ON al.changed_by = e.id
-              ORDER BY al.changed_at DESC
-              LIMIT :limit";
+    // Get recent activity from various tables
+    $activities = [];
     
-    $stmt = $conn->prepare($query);
-    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-    $stmt->execute();
+    // Recent jobs
+    $query = "SELECT 'job' as type, id, job_number as reference, status, created_at, 
+              'Job' as category FROM jobs ORDER BY created_at DESC LIMIT 5";
+    $stmt = $conn->query($query);
+    if ($stmt) {
+        $activities = array_merge($activities, $stmt->fetchAll(PDO::FETCH_ASSOC));
+    }
     
-    $activities = $stmt->fetchAll();
+    // Recent defects
+    $query = "SELECT 'defect' as type, id, defect_number as reference, severity as status, 
+              created_at, 'Defect' as category FROM defects ORDER BY created_at DESC LIMIT 5";
+    $stmt = $conn->query($query);
+    if ($stmt) {
+        $activities = array_merge($activities, $stmt->fetchAll(PDO::FETCH_ASSOC));
+    }
+    
+    // Recent NCRs
+    $query = "SELECT 'ncr' as type, id, ncr_number as reference, status, created_at, 
+              'NCR' as category FROM ncrs ORDER BY created_at DESC LIMIT 5";
+    $stmt = $conn->query($query);
+    if ($stmt) {
+        $activities = array_merge($activities, $stmt->fetchAll(PDO::FETCH_ASSOC));
+    }
+    
+    // Sort by created_at
+    usort($activities, function($a, $b) {
+        return strtotime($b['created_at']) - strtotime($a['created_at']);
+    });
+    
+    // Limit to requested number
+    $activities = array_slice($activities, 0, $limit);
     
     successResponse('Activity loaded successfully', $activities);
     
