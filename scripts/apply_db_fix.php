@@ -25,15 +25,15 @@ try {
     
     $sql = file_get_contents($sql_file);
     
+    // Remove comments
+    $sql = preg_replace('/^--.*$/m', '', $sql);
+    $sql = preg_replace('/\/\*.*?\*\//s', '', $sql);
+    
     // Split into individual statements
-    $statements = array_filter(
-        array_map('trim', explode(';', $sql)),
-        function($stmt) {
-            return !empty($stmt) && 
-                   strpos($stmt, '--') !== 0 && 
-                   strpos($stmt, '/*') !== 0;
-        }
-    );
+    $statements = explode(';', $sql);
+    $statements = array_filter(array_map('trim', $statements), function($stmt) {
+        return !empty($stmt);
+    });
     
     echo "Found " . count($statements) . " SQL statements to execute...\n\n";
     
