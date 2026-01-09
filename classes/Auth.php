@@ -4,6 +4,9 @@
  * Authentication Class
  */
 
+// Ensure Database class is loaded
+require_once __DIR__ . '/../config/database.php';
+
 class Auth {
     private $conn;
     private $database;
