@@ -25,9 +25,9 @@ try {
     $query = "SELECT 
                 d.*,
                 (SELECT COUNT(*) FROM production_stages WHERE department_id = d.id) as stages_count,
-                CONCAT(e.first_name, ' ', e.last_name) as created_by_name
+                u.name as created_by_name
               FROM departments d
-              LEFT JOIN employees e ON d.created_by = e.id
+              LEFT JOIN users u ON d.created_by = u.id
               WHERE 1=1";
     
     $params = [];
