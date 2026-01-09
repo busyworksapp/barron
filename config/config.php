@@ -13,11 +13,14 @@ ini_set('error_log', __DIR__ . '/../logs/error.log');
 // Timezone
 date_default_timezone_set('Africa/Johannesburg');
 
-// Session Configuration
-ini_set('session.cookie_httponly', 1);
-ini_set('session.use_only_cookies', 1);
-ini_set('session.cookie_secure', 0); // Set to 1 in production with HTTPS
-ini_set('session.cookie_samesite', 'Lax');
+// Session Configuration (must be before session_start)
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_httponly', 1);
+    ini_set('session.use_only_cookies', 1);
+    ini_set('session.cookie_secure', 0); // Set to 1 in production with HTTPS
+    ini_set('session.cookie_samesite', 'Lax');
+    session_start();
+}
 
 // Application Constants
 define('APP_NAME', 'Barron Production Management System');
