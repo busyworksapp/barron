@@ -1,13 +1,22 @@
 <?php
 /**
  * ONE-CLICK FIX - Creates all missing tables
+ * Direct database connection - no dependencies
  */
 
-require_once __DIR__ . '/config/database.php';
+// Database credentials from Railway environment variables
+$host = getenv('MYSQLHOST') ?: 'caboose.proxy.rlwy.net';
+$port = getenv('MYSQLPORT') ?: '20038';
+$dbname = getenv('MYSQLDATABASE') ?: 'railway';
+$user = getenv('MYSQLUSER') ?: 'root';
+$password = getenv('MYSQLPASSWORD') ?: 'wvkZIECDnHQqGFyOnOufNpcaYNtDMTHx';
 
 try {
-    $db = new Database();
-    $conn = $db->getConnection();
+    $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
+    $conn = new PDO($dsn, $user, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    ]);
     
     echo "<h1>Creating Tables...</h1><pre>";
     
