@@ -1,9 +1,8 @@
 <?php
 require_once '../../config/config.php';
-require_once '../../classes/Auth.php';
+require_once '../../config/database.php';
 
-$auth = new Auth();
-$auth->requireLogin();
+requireLogin();
 
 if (!hasPermission('production.view')) {
     header('Location: ../../index.php');

@@ -1,15 +1,12 @@
 <?php
 require_once '../../config/config.php';
-require_once '../../classes/Auth.php';
+require_once '../../config/database.php';
 
-$auth = new Auth();
-if (!$auth->isLoggedIn()) {
-    header('Location: ../../login.php');
-    exit;
-}
+// Check authentication
+requireLogin();
 
-if (!$auth->hasPermission('finance.view_bom')) {
-    header('Location: ../../dashboard.php');
+if (!hasPermission('finance.view_bom')) {
+    header('Location: ../../index.php');
     exit;
 }
 
@@ -82,7 +79,7 @@ require_once '../../includes/sidebar.php';
                 <option value="">All Products</option>
             </select>
         </div>
-        <?php if ($auth->hasPermission('finance.edit_bom')): ?>
+        <?php if (hasPermission('finance.edit_bom')): ?>
         <div class="filter-group">
             <button class="btn btn-primary" onclick="openBOMModal()">
                 <i class="fas fa-plus"></i> Create BOM
@@ -200,7 +197,7 @@ require_once '../../includes/sidebar.php';
 
             <div class="form-actions">
                 <button type="button" class="btn btn-secondary" onclick="closeBOMModal()">Cancel</button>
-                <?php if ($auth->hasPermission('finance.edit_bom')): ?>
+                <?php if (hasPermission('finance.edit_bom')): ?>
                 <button type="submit" class="btn btn-primary">Save BOM</button>
                 <?php endif; ?>
             </div>

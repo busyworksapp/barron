@@ -1,9 +1,9 @@
 <?php
 require_once '../../config/config.php';
-require_once '../../classes/Auth.php';
+require_once '../../config/database.php';
 
-$auth = new Auth();
-$auth->requireLogin();
+// Check authentication
+requireLogin();
 
 if (!hasPermission('maintenance.view')) {
     header('Location: ' . BASE_URL . 'index.php');
